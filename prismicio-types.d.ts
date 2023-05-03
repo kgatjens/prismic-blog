@@ -73,7 +73,7 @@ type BlogDocumentDataSlices1Slice = MetadataSlice;
  * @typeParam Lang - Language API ID of the document.
  */
 export type BlogDocument<Lang extends string = string> =
-  prismicT.PrismicDocumentWithoutUID<Simplify<BlogDocumentData>, "blog", Lang>;
+  prismicT.PrismicDocumentWithUID<Simplify<BlogDocumentData>, "blog", Lang>;
 /** Content for Navigation documents */
 interface NavigationDocumentData {
   /**
@@ -221,6 +221,68 @@ export type AllDocumentTypes =
   | NavigationDocument
   | PageDocument
   | SettingsDocument;
+/**
+ * Primary content in BlogCarousel → Primary
+ *
+ */
+interface BlogCarouselSliceDefaultPrimary {
+  /**
+   * Carousel Image field in *BlogCarousel → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_carousel.primary.carousel_image
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  carousel_image: prismicT.ImageField<never>;
+}
+/**
+ * Item in BlogCarousel → Items
+ *
+ */
+export interface BlogCarouselSliceDefaultItem {
+  /**
+   * Carousel Link field in *BlogCarousel → Items*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_carousel.items[].carousel_link
+   * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+   *
+   */
+  carousel_link: prismicT.LinkField;
+}
+/**
+ * Default variation for BlogCarousel Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type BlogCarouselSliceDefault = prismicT.SharedSliceVariation<
+  "default",
+  Simplify<BlogCarouselSliceDefaultPrimary>,
+  Simplify<BlogCarouselSliceDefaultItem>
+>;
+/**
+ * Slice variation for *BlogCarousel*
+ *
+ */
+type BlogCarouselSliceVariation = BlogCarouselSliceDefault;
+/**
+ * BlogCarousel Shared Slice
+ *
+ * - **API ID**: `blog_carousel`
+ * - **Description**: `BlogCarousel`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type BlogCarouselSlice = prismicT.SharedSlice<
+  "blog_carousel",
+  BlogCarouselSliceVariation
+>;
 /**
  * Primary content in Hero → Primary
  *
@@ -768,6 +830,11 @@ declare module "@prismicio/client" {
       SettingsDocumentData,
       SettingsDocument,
       AllDocumentTypes,
+      BlogCarouselSliceDefaultPrimary,
+      BlogCarouselSliceDefaultItem,
+      BlogCarouselSliceDefault,
+      BlogCarouselSliceVariation,
+      BlogCarouselSlice,
       HeroSliceDefaultPrimary,
       HeroSliceDefault,
       HeroSliceVariation,
